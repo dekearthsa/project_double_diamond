@@ -60,16 +60,20 @@ export default {
     methods:{
         haddleDimond(selection){
             if(selection === "dimond-l-p"){
-
+                this.$store.state.saveDimondSelection = selection
+                this.$router.push("/record")
             }
             else if(selection === "dimond-r-p"){
-
+                this.$store.state.saveDimondSelection = selection
+                this.$router.push("/record")
             }
             else if(selection === "dimond-l-s"){
-
+                this.$store.state.saveDimondSelection = selection
+                this.$router.push("/record")
             }
             else if(selection === "dimond-r-s"){
-                
+                this.$store.state.saveDimondSelection = selection
+                this.$router.push("/record")
             }
         },
         haddleBack(){

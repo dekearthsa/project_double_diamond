@@ -3,6 +3,7 @@ import ViewPageNotFound from "../view/ViewPageNotFound.vue"
 import ViewHomePage from "../view/ViewHomePage.vue"
 import ViewDimondPage from "../view/ViewDimondPage.vue"
 import ViewRecordPage from "../view/ViewRecordPage.vue"
+import ViewWordCloudPage from "../view/ViewWordCloudPage.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +22,11 @@ const router = createRouter({
       path: "/record",
       name: "Record",
       component:ViewRecordPage
+    },
+    {
+      path: "/wordcloud",
+      name: "WordCloud",
+      component: ViewWordCloudPage
     },
     {
       path: "/:pathMatch(.*)*",

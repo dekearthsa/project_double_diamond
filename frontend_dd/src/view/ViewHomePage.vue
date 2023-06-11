@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="mt-5">Double Diamond</div>
-        <div class="mt-[150px]">
+        <div >
             <button class="button-27" role="button" @click="haddleStart">Start</button>
         </div>
     </div>
@@ -32,7 +32,7 @@ export default {
 .hompage-container{
     background: linear-gradient(180deg, rgba(255,255,255,1) 1%, rgba(110,110,110,1) 49%, rgba(59,59,59,1) 100%);
     height: 100vh;
-    color: white;
+    color: rgb(236, 236, 236);
 }
 .set-logo{
     border: 3px solid rgb(216, 216, 216);

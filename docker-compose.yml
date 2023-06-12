@@ -1,0 +1,70 @@
+version: '3.7'
+
+volumes:
+  database:
+    external: true
+
+services:
+  service_save_dd:
+    container_name: service_save_dd
+    restart: unless-stopped
+    build:
+      context: "./backend"
+    ports:
+      - "3311:3311"
+    networks:
+      - net
+  
+  service_wordcloud_dd:
+    container_name: service_wordcloud_dd
+    restart: unless-stopped
+    build:
+      context: "./backend_wordcloud"
+    ports:
+      - "3422:3422"
+    networks:
+      - net
+  
+  service_frontend_dd:
+    container_name: frontend_dd
+    restart: unless-stopped
+    build: 
+      context: "./frontend_dd"
+    ports:
+      - "5173:5173"
+    networks:
+      - net
+
+  database:
+    container_name: database
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - ./data/db:/data/db
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    networks:
+      - net
+    
+  database-admin:
+    container_name: mongo_express_gui
+    restart: always
+    image: mongo-express:latest
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: root
+      ME_CONFIG_BASICAUTH_PASSWORD: root
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@database:27017/
+      ME_CONFIG_SITE_BASEURL: /mongoadmin/
+    ports:
+      - 8081:8081
+    networks:
+      - net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    

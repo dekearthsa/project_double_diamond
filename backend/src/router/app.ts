@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/backend/debug",funcTestControll);
+app.post("/backend/insert", funcInsertControll)
 
 export {app}
 

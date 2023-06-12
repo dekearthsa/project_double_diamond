@@ -10,7 +10,7 @@
         <div class="set-wordcloud-container">
             <div class="set-img">
                 <!-- place image here -->
-                <img/>
+                <img :src="`data:image/png;base64, `" />
             </div>
         </div>
         <div class="comment-label">

@@ -12,16 +12,33 @@
         </div>
         <div class="mt-5">Double Diamond</div>
         <div class="set-btn-27">
-            <button class="button-27" role="button" @click="haddleStart">Start</button>
+          <div v-if="$store.state.name === ''">
+            <div>
+              <input placeholder="name" v-model="setname" />
+            </div>
+            <div>
+              <button class="set-submit mt-10" role="button" @click="haddleSaveName">Submit</button>
+            </div>
+          </div>
+            
+            <button v-if="$store.state.name !== ''" class="button-27" role="button" @click="haddleStart">Start</button>
         </div>
     </div>
 </template>
 
 <script>
 export default {
+  data(){
+    return{
+      setname:""
+    }
+  },
   methods:{
     haddleStart() {
       this.$router.push("/dimond")
+    },
+    haddleSaveName(){
+      this.$store.state.name = this.setname;
     }
   }
 }
@@ -103,6 +120,29 @@ export default {
   .button-27:active {
     box-shadow: none;
     transform: translateY(0);
+  }
+
+  input{
+    text-decoration: none;
+    border-radius: 10px;
+    height: 40px;
+    border: none;
+    color: rgb(255, 250, 250);
+    padding-left: 10px;
+    background: rgb(79, 79, 79);
+  }
+
+  input::placeholder{
+    padding-left: 10px;
+    
+  }
+
+  .set-submit{
+    width: 30%;
+    height: 40px;
+    border-radius: 10px;
+    background: #636363;
+    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
   }
 
 </style>

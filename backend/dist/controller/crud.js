@@ -11,21 +11,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HaddleCRUD = void 0;
 const { answerModel } = require("../model/modelAnswer");
-const { userProfileModel } = require("../model/modelUserProfile");
 var HaddleCRUD;
 (function (HaddleCRUD) {
     class InsertData {
-        insertUserProfile() {
+        insertUserData(name, diamond, answer, imgBase64, comment) {
             return __awaiter(this, void 0, void 0, function* () {
+                try {
+                    answerModel.create({
+                        Username: name,
+                        Diamond: diamond,
+                        Answer: answer,
+                        ImageBase64: imgBase64,
+                        Comment: comment
+                    });
+                    const warp = {
+                        status: true,
+                        desc: "insert success."
+                    };
+                    return warp;
+                }
+                catch (err) {
+                    const warp = {
+                        status: false,
+                        desc: err
+                    };
+                    return warp;
+                }
             });
         }
     }
     HaddleCRUD.InsertData = InsertData;
-    class FindData {
-        findingUserProfile() {
-            return __awaiter(this, void 0, void 0, function* () {
-            });
-        }
-    }
-    HaddleCRUD.FindData = FindData;
 })(HaddleCRUD = exports.HaddleCRUD || (exports.HaddleCRUD = {}));

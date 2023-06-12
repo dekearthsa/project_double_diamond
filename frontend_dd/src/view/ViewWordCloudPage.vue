@@ -10,14 +10,14 @@
         <div class="set-wordcloud-container">
             <div class="set-img">
                 <!-- place image here -->
-                <img :src="`data:image/png;base64, `" />
+                <img :src="`data:image/png;base64, ${$store.state.wordcloudBase64}`" />
             </div>
         </div>
         <div class="comment-label">
             <div>Comment</div>  
         </div>
         <div class="set-comment-container">
-            <textarea></textarea>
+            <textarea v-model="$store.state.comment"></textarea>
         </div>
         <div class="set-save-btn flex justify-around">
             <button class="button-50" role="button" @click="haddleBack">Back</button>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
     components:{
 
@@ -58,9 +60,29 @@ export default {
         haddleBack(){
             this.$router.push("/record")
         },
-        haddleSave(){
-            alert("Save success!");
-            this.$router.push("/");
+        async haddleSave(){
+            try{
+
+                const payload = {
+                    name: this.$store.state.name,
+                    diamond: this.$store.state.saveDimondSelection, 
+                    answer: this.$store.state.text, 
+                    imgBase64: this.$store.state.wordcloudBase64,
+                    comment: this.$store.state.comment?this.$store.state.comment:"no-comment"
+                }
+
+                const statusData = await axios.post("http://localhost:3311/api/insert", payload); 
+
+                if(statusData.data.status){
+                    alert(statusData.data.desc);
+                    this.$router.push("/");
+                }else{
+                    alert(statusData.data.desc)
+                }
+            }catch(err){
+                alert(err)
+                console.log(err);
+            }
         }
     },
     mounted(){

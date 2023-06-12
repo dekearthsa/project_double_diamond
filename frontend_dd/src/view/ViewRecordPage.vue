@@ -8,7 +8,7 @@
                             Microphone is recording...
                         </div>
                         <div class="set-textarea">
-                            <textarea v-model="text"></textarea>
+                            <textarea v-model="$store.state.text"></textarea>
                         </div>
                         <div class="set-edit-container flex justify-end">
                             <button class="btn-edit" @click="haddleMic">
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import IconMic from '../components/icons/IconMic.vue';
 import IconMicOffVue from '../components/icons/IconMicOff.vue';
 import IconRotate from '../components/icons/IconRotate.vue';
@@ -55,7 +56,6 @@ export default {
     },
     data(){
         return{
-            text:"",
             isMic: false
         }
     },
@@ -65,7 +65,7 @@ export default {
             if(!this.isMic){
                 recognition.start()
                 recognition.addEventListener("result", event => {
-                        this.text = Array.from(event.results)
+                        this.$store.state.text = Array.from(event.results)
                             .map(result => result[0])
                             .map(result => result.transcript)
                             .join("");
@@ -77,7 +77,13 @@ export default {
             }
         },
 
-        haddleNextPage() {
+        async haddleNextPage() {
+            const warp = {
+                text: this.$store.state.text
+            }
+            const base64Data = await axios.post("http://localhost:3422/api/wordcloud", warp);
+            this.$store.state.wordcloudBase64 = base64Data.data
+            console.log(this.$store.state.wordcloudBase64)
             this.$router.push("/wordcloud");
         },
 

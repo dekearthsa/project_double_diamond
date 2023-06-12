@@ -4,5 +4,8 @@ export default createStore({
     state:{
         saveDimondSelection: "",
         name: "",
+        text: "",
+        comment: "",
+        wordcloudBase64:""
     }
 });

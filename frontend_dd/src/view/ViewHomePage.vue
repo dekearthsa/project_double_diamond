@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="mt-5">Double Diamond</div>
-        <div >
+        <div class="set-btn-27">
             <button class="button-27" role="button" @click="haddleStart">Start</button>
         </div>
     </div>
@@ -28,7 +28,9 @@ export default {
 </script>
 
 <style scoped>
-
+.set-btn-27{
+  padding-top: 100px;
+}
 .hompage-container{
     background: linear-gradient(180deg, rgba(255,255,255,1) 1%, rgba(110,110,110,1) 49%, rgba(59,59,59,1) 100%);
     height: 100vh;

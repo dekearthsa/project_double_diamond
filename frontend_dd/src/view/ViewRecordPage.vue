@@ -36,7 +36,6 @@
             </div>
         </div>
     </div>
-    
 </template>
 
 <script>
@@ -105,7 +104,6 @@ export default {
     .set-text{
         padding-top: 70px;
     }
-     
     
     textarea{
         width: 95%;
@@ -160,27 +158,26 @@ export default {
     .button-27:disabled {
         pointer-events: none;
     }
-      
-      .button-27:hover {
+    .button-27:hover {
         box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
         transform: translateY(-2px);
-      }
-      
-      .button-27:active {
+    }
+
+    .button-27:active {
         box-shadow: none;
         transform: translateY(0);
-      }
+    }
 
-      .set-btn-back{
+    .set-btn-back{
         margin-top: 10px;
-      }
-      .btn-back{
+    }
+    .btn-back{
         width: 100px;
         height: 40px;
         background:#515151;
         color: white;
         border-radius: 20px;
-      }
+    }
 
     .set-rotate{
         display: none;

@@ -4,6 +4,8 @@ volumes:
   database:
     external: true
 
+
+
 services:
   service_save_dd:
     container_name: service_save_dd
@@ -67,4 +69,9 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+
+networks:
+  net:
+    external: true
+    driver: bridge
     

@@ -84,7 +84,7 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 720px) and (min-height: 380px){
+@media screen and (min-width: 700px) and (min-height: 200px){
     .rotate-desc{
         display: none;
     }
@@ -208,7 +208,7 @@ export default {
     }
 } 
 
-@media screen and (min-width: 720px) and (min-height: 500px) {
+@media screen and (min-width: 700px) and (min-height: 400px) {
     .rotate-desc{
         display: none;
     }
@@ -301,7 +301,7 @@ export default {
     }
 }
 
-@media screen and (max-width: 721px) {
+@media screen and (max-width: 700px) {
     .dimond-container{
         display: none;
     }

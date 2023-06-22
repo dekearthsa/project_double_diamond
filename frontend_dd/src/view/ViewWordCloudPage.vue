@@ -71,7 +71,7 @@ export default {
                     comment: this.$store.state.comment?this.$store.state.comment:"no-comment"
                 }
 
-                const statusData = await axios.post("http://localhost:3311/api/insert", payload); 
+                const statusData = await axios.post(`http://${this.$store.state.ip_address}:3311/api/insert`, payload); 
 
                 if(statusData.data.status){
                     alert(statusData.data.desc);

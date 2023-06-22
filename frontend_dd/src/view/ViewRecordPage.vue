@@ -42,6 +42,7 @@ import IconMic from '../components/icons/IconMic.vue';
 import IconMicOffVue from '../components/icons/IconMicOff.vue';
 import IconRotate from '../components/icons/IconRotate.vue';
 
+
 window.SpeechRecognition = window.SpeechRecognition ||  window.webkitSpeechRecognition;
 const recognition = new window.SpeechRecognition();      
 recognition.interimResults = true;
@@ -81,7 +82,7 @@ export default {
             const warp = {
                 text: this.$store.state.text
             }
-            const base64Data = await axios.post("http://localhost:3422/api/wordcloud", warp);
+            const base64Data = await axios.post(`http://${this.$store.state.ip_address}:3422/api/wordcloud`, warp);
             this.$store.state.wordcloudBase64 = base64Data.data
             console.log(this.$store.state.wordcloudBase64)
             this.$router.push("/wordcloud");
@@ -90,6 +91,8 @@ export default {
         haddleBack() {
             this.$router.push("/dimond")
         }
+    },
+    mounted(){
     }
 }
 </script>

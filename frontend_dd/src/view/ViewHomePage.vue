@@ -40,6 +40,9 @@ export default {
     haddleSaveName(){
       this.$store.state.name = this.setname;
     }
+  },
+  mounted(){
+    // console.log(funcSendIPAddress)
   }
 }
 </script>

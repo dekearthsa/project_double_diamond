@@ -6,9 +6,9 @@ exports.connect = () => {
     mongoose.connect(MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        authSource: 'admin',
-        auth: { username: 'root', password: 'root' },
-        driverInfo: { name: 'Mongoose', version: '7.0.1' }
+        // authSource: 'admin',
+        // auth: { username: 'root', password: 'root' },
+        // driverInfo: { name: 'Mongoose', version: '7.0.1' }
     })
         .then(() => {
         console.log("connected to database");

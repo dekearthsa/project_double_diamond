@@ -1,29 +1,6 @@
-# frontend_dd
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+// 1. เปิด vscode ใน ไฟล์ frontend_dd
+// 2. check IP เครื่องเราว่า IP อะไร  เข้าไปที่ System Preferences > Network > Wifi > Advanced > TCP/IP > ดูที่ IPv4 Address
+// 3. นำมา IP address ใส่เข้าไปในไฟล์ตามนี้ src > store.js
+// 4. นำ IP ที่ได้มาใส่ใน ip_address ใน ""
+// 5. เปิด vscode ใน folder frontend_dd
+// 6. ใช้คำสั่ง npm run dev

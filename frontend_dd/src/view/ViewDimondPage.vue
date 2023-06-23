@@ -1,16 +1,9 @@
 <template>
     <div class="dimond-container">
-        <div class="set-btn">
-            <button class="button-27" @click="haddleBack()">
-                back
-            </button>
-        </div>
-        
         <div class="title-dimond flex justify-center">
             <div class="set-front font-bold">Double Diamond</div>
         </div>
         <div class="set-rotate ">
-            
             <div class="flex justify-center">
                 <div class="triangle-left" @click="haddleDimond('dimond-l-p')"></div>
                 <div class="triangle-right" @click="haddleDimond('dimond-r-p')"></div>
@@ -18,7 +11,7 @@
                 <div class="triangle-left" @click="haddleDimond('dimond-l-s')"></div>
                 <div class="triangle-right" @click="haddleDimond('dimond-r-s')"></div>
             </div>
-            <div class="set-title-underline   m-auto">
+            <div class="set-title-underline m-auto">
                 <div class="title-underline right-s ">
                     <div class="flex justify-center m-auto mt-1">
                         Problem
@@ -30,23 +23,45 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="rotate-desc text-center ">
-        <div class="set-icon flex justify-center">
-            <IconRotate/>
-        </div>
-        <div>Please rotate your phone in this page. </div>
-        <div class="set-btn">
-            <button class="button-27" @click="haddleBack()">
-                back
-            </button>
+            <div class="title-selection mt-[50px] mb-6 text-center  h-[40px] ">
+                <div class="font-bold text-white" v-if="$store.state.saveDimondSelection !== ''">
+                    {{ $store.state.saveDimondSelection }}
+                </div>
+            </div>
+            <div class="h-[30px] w-[90%] m-auto flex justify-end">
+                <div v-if="this.$store.state.micStatus === true" class="text-[10px] text-white translate-y-4 mr-5">
+                    <span class="relative flex justify-end h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-700 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-red-700"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="m-auto w-[90%] flex justify-center">
+                <textarea class="m-auto w-[90%] rounded-xl" v-if="$store.state.saveDimondSelection===''"></textarea>
+                <textarea class="m-auto w-[90%] rounded-xl" v-if="$store.state.saveDimondSelection === 'Problem left dimond'" v-model="$store.state.text_l_p"></textarea>
+                <textarea class="m-auto w-[90%] rounded-xl" v-if="$store.state.saveDimondSelection === 'Problem right dimond'" v-model="$store.state.text_r_p"></textarea>
+                <textarea class="m-auto w-[90%] rounded-xl" v-if="$store.state.saveDimondSelection === 'Solution left dimond'" v-model="$store.state.text_l_s"></textarea>
+                <textarea class="m-auto w-[90%] rounded-xl" v-if="$store.state.saveDimondSelection === 'Solution right dimond'" v-model="$store.state.text_r_s"></textarea>
+            </div>
+            <div class="flex justify-around mt-[50px]">
+                <button class="shadow-lg w-[120px] h-[40px] rounded-md bg-slate-50 active:bg-slate-700 active:text-white">
+                    Back
+                </button>
+                <!-- <button class="shadow-lg w-[120px] h-[40px] rounded-md bg-slate-50 active:bg-slate-700 active:text-white" @click="haddleDebugData">
+                    Debug
+                </button> -->
+                <button class="shadow-lg w-[120px] h-[40px] rounded-md bg-slate-50 active:bg-slate-700 active:text-white" @click="haddleSubmit">
+                    Submit
+                </button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import IconRotate from '../components/icons/IconRotate.vue';
+import axios from "axios";
+
 
 export default {
     components:{
@@ -54,26 +69,128 @@ export default {
     },
     data(){
         return{
-
+            onloading:false
         }
     },
     methods:{
+        async haddleSubmit(){
+            this.onloading = true
+            try{
+                const warpText = {  
+                    text_l_p: this.$store.state.text_l_p,
+                    text_r_p: this.$store.state.text_r_p,
+                    text_l_s: this.$store.state.text_l_s,
+                    text_r_s: this.$store.state.text_r_s
+                }
+                const rawDataImg = await axios.post(`http://${this.$store.state.ip_address}/api/wordcloud`,warpText);
+                const wordcloudBase64_l_p= rawDataImg.data.img_l_p
+                const wordcloudBase64_r_p= rawDataImg.data.img_r_p
+                const wordcloudBase64_l_s= rawDataImg.data.img_l_s
+                const wordcloudBase64_r_s= rawDataImg.data.img_r_s
+                if(rawDataImg.data.status === 200){
+                    const warpData = {
+                        username: this.$store.state.name,
+                        text_l_p: this.$store.state.text_l_p,
+                        img_l_p: wordcloudBase64_l_p,
+                        text_r_p: this.$store.state.text_r_p,
+                        img_r_p: wordcloudBase64_r_p,
+                        text_l_s: this.$store.state.text_l_s,
+                        img_l_s: wordcloudBase64_l_s,
+                        text_r_s: this.$store.state.text_r_s,
+                        img_r_s: wordcloudBase64_r_s,
+                    }
+                    try{
+                        const sendStatus = await axios.post(`http://${this.$store.state.ip_address}/api/insert`,warpData);
+                        if(sendStatus.data.status === 200){
+                            alert("Insert success.")
+                            this.onloading = false
+                        }else{
+                            alert("Fail to save data!")
+                            this.onloading = false
+                        }
+                    }catch(err){
+                        alert(err)
+                        this.onloading = false
+                    }
+                }else{
+                    alert("Fail to convert text to img!")
+                    this.onloading = false
+                }
+            }catch(err){
+                alert(err)
+                this.onloading = false
+            }
+        },
+
+        // haddleDebugData() {
+        //     console.log("selection => ",this.$store.state.saveDimondSelection)
+        //     console.log("text_l_p => ",this.$store.state.text_l_p)
+        //     console.log("text_r_p => ",this.$store.state.text_r_p)
+        //     console.log("text_l_s => ",this.$store.state.text_l_s)
+        //     console.log("text_r_s => ",this.$store.state.text_r_s)
+        // },
+
         haddleDimond(selection){
+            window.SpeechRecognition = window.SpeechRecognition ||  window.webkitSpeechRecognition;
+            const recognition = new window.SpeechRecognition();      
+            recognition.interimResults = true;
+            recognition.continuous = true;
+            recognition.lang = 'th-TH';
+
+            recognition.stop();
+            recognition.addEventListener("end", () => {
+                    recognition.stop();
+            });
             if(selection === "dimond-l-p"){
-                this.$store.state.saveDimondSelection = selection
-                this.$router.push("/record")
+                this.$store.state.micStatus = true
+                this.$store.state.saveDimondSelection = "Problem left dimond"
+                recognition.addEventListener("result", (event) => {
+                let text = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join("")
+                    this.$store.state.text_l_p = text
+                    })
+                recognition.start()
             }
             else if(selection === "dimond-r-p"){
-                this.$store.state.saveDimondSelection = selection
-                this.$router.push("/record")
+                this.$store.state.micStatus = true
+                this.$store.state.saveDimondSelection = "Problem right dimond"
+                recognition.addEventListener("result", (event) => {
+                
+                let text = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join("")
+                    this.$store.state.text_r_p = text
+                })
+                recognition.start()
             }
             else if(selection === "dimond-l-s"){
-                this.$store.state.saveDimondSelection = selection
-                this.$router.push("/record")
+                this.$store.state.micStatus = true
+                this.$store.state.saveDimondSelection = "Solution left dimond"
+                recognition.addEventListener("result", (event) => {
+                    
+                    let text = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join("")
+                    this.$store.state.text_l_s = text
+                })
+                recognition.start()
             }
             else if(selection === "dimond-r-s"){
-                this.$store.state.saveDimondSelection = selection
-                this.$router.push("/record")
+                this.$store.state.micStatus = true
+                this.$store.state.saveDimondSelection = "Solution right dimond"
+                recognition.addEventListener("result", (event) => {
+                    
+                    let text = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join("")
+                    this.$store.state.text_r_s = text
+                })
+                recognition.start()
             }
         },
         haddleBack(){
@@ -84,54 +201,60 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 700px) and (min-height: 200px){
-    .rotate-desc{
-        display: none;
+
+    textarea{
+
+        height: 20vh;
+        border: 1px solid rgb(105, 105, 105);
+        border-radius: 10px;
+        padding: 10px;
+        background: rgb(243, 243, 243);
     }
 
     .title-dimond{
-        margin-top: 30px;
+        margin-top: 30px;   
         margin-bottom: 50px;
     }
     .dimond-container{
         background: rgb(255,255,255);
         background: linear-gradient(180deg, rgba(255,255,255,1) 1%, rgba(110,110,110,1) 49%, rgba(59,59,59,1) 100%);
         height: 100vh;
+        width: 100%;
     }
     .triangle-right {
         width: 0;
         height: 0;
-        border-top: 80px solid transparent;
-        border-left: 110px solid rgb(176, 176, 176);
-        border-bottom: 80px solid transparent;
+        border-top: 50px solid transparent;
+        border-left: 70px solid rgb(233, 233, 233);
+        border-bottom: 50px solid transparent;
         border-radius: 10px;
         margin-left: 10px;
         transition: border-left 0.5s ease-out 100ms;
     }
     .triangle-right:hover{
-        border-left: 110px solid rgb(52, 52, 52);
+        border-left: 70px solid rgb(20, 20, 20);
     }
   
     .triangle-right:active{
-        border-left: 110px solid rgb(52, 52, 52);
+        border-left: 70px solid rgb(20, 20, 20);
     }
 
     .triangle-left {
         width: 0;
         height: 0;
-        border-top: 80px solid transparent;
-        border-right: 110px solid rgb(75, 75, 75);
-        border-bottom: 80px solid transparent;
+        border-top: 50px solid transparent;
+        border-right: 70px solid rgb(75, 75, 75);
+        border-bottom: 50px solid transparent;
         border-radius: 10px;
         transition: border-right 0.5s ease-out 100ms
     }
 
     .triangle-left:hover{
-        border-right: 110px solid rgb(52, 52, 52);
+        border-right:  70px solid rgb(20, 20, 20);
     }
 
     .triangle-left:active{
-        border-right: 110px solid rgb(52, 52, 52);
+        border-right:  70px solid rgb(20, 20, 20);
     }
 
     .set-front{
@@ -141,7 +264,7 @@ export default {
     .set-title-underline{
         display: flex;
         justify-content: space-between;
-        width: 65%;
+        width: 100%;
         margin-top: 10px;
     }
 
@@ -161,200 +284,8 @@ export default {
     .rotate-desc{
         font-size: 14px;
     }
-
-    .button-27 {
-        appearance: none;
-        background-color: #201f1f;
-        border: 2px solid #1b1b1b;
-        border-radius: 15px;
-        box-sizing: border-box;
-        color: #FFFFFF;
-        cursor: pointer;
-        display: inline-block;
-        font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-        font-size: 16px;
-        font-weight: 600;
-        line-height: normal;
-        margin: 0;
-        min-height: 40px;
-        outline: none;
-        text-align: center;
-        text-decoration: none;
-        transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        width: 10%;
  
-        will-change: transform;
-      }
-      
-      .button-27:disabled {
-        pointer-events: none;
-      }
-      
-      .button-27:hover {
-        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-        transform: translateY(-2px);
-      }
-      
-      .button-27:active {
-        box-shadow: none;
-        transform: translateY(0);
-      }
-
-    .set-btn{
-        transform: translateY(10px) translateX(10px); 
-    }
-} 
-
-@media screen and (min-width: 700px) and (min-height: 400px) {
-    .rotate-desc{
-        display: none;
-    }
-
-    .set-rotate{
-        margin-top: 200px;
-    }
-
-    .set-icon{
-        margin-bottom: 0.75rem
-    }
-
-    .title-dimond{
-        padding-top: 100px;
-    }
-    .dimond-container{
-        background: rgb(255,255,255);
-        background: linear-gradient(180deg, rgba(255,255,255,1) 1%, rgba(110,110,110,1) 49%, rgba(59,59,59,1) 100%);
-        height: 100vh;
-    }
-    .triangle-right {
-        width: 0;
-        height: 0;
-        border-top: 100px solid transparent;
-        border-left: 140px solid rgb(176, 176, 176);
-        border-bottom: 100px solid transparent;
-        border-radius: 10px;
-        transition: border-left 0.5s ease-out 100ms
-    }
-    .triangle-right:hover{
-        border-left: 140px solid rgb(52, 52, 52);
-    }
-  
-    .triangle-right:active{
-        border-left: 140px solid rgb(52, 52, 52);
-    }
-
-    .triangle-left {
-        width: 0;
-        height: 0;
-        border-top: 100px solid transparent;
-        border-right: 140px solid rgb(75, 75, 75);
-        border-bottom: 100px solid transparent;
-        border-radius: 10px;
-        transition: border-right 0.5s ease-out 100ms;
-        margin-right: 1.25rem;
-    }
-
-    .triangle-left:hover{
-        border-right: 140px solid rgb(52, 52, 52);
-    }
-
-    .triangle-left:active{
-        border-right: 140px solid rgb(52, 52, 52);
-    }
-
-    .set-front{
-        font-size: 30px;
-    }
-
-    .set-title-underline{
-        display: flex;
-        justify-content: center;
-        width: 50%;
-        
-    }
-
-    .title-underline{
-        display: flex;
-        margin-top: 30px;
-        border-top: 2px solid rgb(193, 193, 193);
-        width: 400px;
-        color: white;
-    }
-
-    .right-s{
-        margin-right: 2.5rem
-    }
-    .left-s{
-        margin-left: 2.5rem
-    }
-
-    .set-midde-line{
-        margin-left: 80px;
-        margin-right: 80px;
-    }
-
-    .rotate-desc{
-        font-size: 14px;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    .dimond-container{
-        display: none;
-    }
-
-    .rotate-desc{
-        margin-top: 100px;
-    }
-
-    .button-27 {
-        appearance: none;
-        background-color: #201f1f;
-        border: 2px solid #1b1b1b;
-        border-radius: 15px;
-        box-sizing: border-box;
-        color: #FFFFFF;
-        cursor: pointer;
-        display: inline-block;
-        font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-        font-size: 16px;
-        font-weight: 600;
-        line-height: normal;
-        margin: 0;
-        min-height: 40px;
-        outline: none;
-        text-align: center;
-        text-decoration: none;
-        transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        width: 30%;
-        margin-top: 50px;
-        will-change: transform;
-      }
-      
-      .button-27:disabled {
-        pointer-events: none;
-      }
-      
-      .button-27:hover {
-        box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-        transform: translateY(-2px);
-      }
-      
-      .button-27:active {
-        box-shadow: none;
-        transform: translateY(0);
-      }
-
-    .set-btn{
-        transform: translateY(10px) translateX(10px); 
-    }
-}
+       
 
   
 </style>

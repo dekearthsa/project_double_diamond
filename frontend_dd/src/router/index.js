@@ -18,16 +18,16 @@ const router = createRouter({
       name: "Diamond",
       component: ViewDimondPage
     },
-    {
-      path: "/record",
-      name: "Record",
-      component:ViewRecordPage
-    },
-    {
-      path: "/wordcloud",
-      name: "WordCloud",
-      component: ViewWordCloudPage
-    },
+    // {
+    //   path: "/record",
+    //   name: "Record",
+    //   component:ViewRecordPage
+    // },
+    // {
+    //   path: "/wordcloud",
+    //   name: "WordCloud",
+    //   component: ViewWordCloudPage
+    // },
     {
       path: "/:pathMatch(.*)*",
       name: "404",

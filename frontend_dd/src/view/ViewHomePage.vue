@@ -19,8 +19,7 @@
             <div>
               <button class="set-submit mt-10" role="button" @click="haddleSaveName">Submit</button>
             </div>
-          </div>
-            
+          </div>            
             <button v-if="$store.state.name !== ''" class="button-27" role="button" @click="haddleStart">Start</button>
         </div>
     </div>
@@ -30,19 +29,26 @@
 export default {
   data(){
     return{
-      setname:""
+      setname:"",
+      hold: "none"
     }
   },
+  computed:{
+  },  
   methods:{
     haddleStart() {
-      this.$router.push("/dimond")
+      this.$router.push("/dimond")  
     },
     haddleSaveName(){
       this.$store.state.name = this.setname;
-    }
+    },
+    
   },
   mounted(){
     // console.log(funcSendIPAddress)
+    // setInterval(() => {
+    //   console.log(this.hold)
+    // });
   }
 }
 </script>

@@ -35,63 +35,53 @@ def send_word_cloud():
     set_stop_word =  thai_stopwords()
 
     if request.method == 'POST':
-        # base64_array = []
         req = request.get_json(force=True)
-        # print("req body ===> ",req['text'])
-        text = req['text']
-        print("text => ",text)
-        if(text != ''):
+        arrayText = []
+        text_l_p = req['text_l_p']
+        text_r_p = req['text_r_p']
+        text_l_s = req['text_l_s']
+        text_r_s = req['text_r_s']
+        arrayText.append(text_l_p)
+        arrayText.append(text_r_p)
+        arrayText.append(text_l_s)
+        arrayText.append(text_r_s)
 
-            words = word_tokenize(text) 
-            all_words = ' '.join(words).lower().strip()
-            # print("all_words ==> ",all_words)
+        if(len(arrayText) != 0):
+            arrayBase64 = []
+            for text in len(text):
+                words = word_tokenize(text) 
+                all_words = ' '.join(words).lower().strip()
+                # print("all_words ==> ",all_words)
 
-            wordcloud = WordCloud(
-                        regexp='[ก-๙]+',
-                        font_path=is_font_path,
-                        stopwords=set_stop_word,
-                        width=250, 
-                        height=250,
-                        prefer_horizontal=1,
-                        max_words=50, 
-                        colormap='tab20c',
-                        background_color = 'white').generate(all_words)
+                wordcloud = WordCloud(
+                            regexp='[ก-๙]+',
+                            font_path=is_font_path,
+                            stopwords=set_stop_word,
+                            width=250, 
+                            height=250,
+                            prefer_horizontal=1,
+                            max_words=50, 
+                            colormap='tab20c',
+                            background_color = 'white').generate(all_words)
 
-            plt.figure(figsize = (10, 9))
-            plt.imshow(wordcloud)
-            plt.axis('off')
-            plt.tight_layout(pad=0)
-            plt.savefig(image, format='png')
+                plt.figure(figsize = (10, 9))
+                plt.imshow(wordcloud)
+                plt.axis('off')
+                plt.tight_layout(pad=0)
+                plt.savefig(image, format='png')
 
-            base64_img = base64.encodestring(image.getvalue())
-
-            return base64_img
-
+                base64_img = base64.encodestring(image.getvalue())
+                arrayBase64.append(base64_img)
+                
+            return jsonify(
+                status=200,
+                img_l_p=arrayBase64[0],
+                img_r_p=arrayBase64[1],
+                img_l_s=arrayBase64[2],
+                img_r_s=arrayBase64[3]
+            )
         else:
-            text= "ไม่่พบข้อความ"
-            words = word_tokenize(text) 
-            all_words = ' '.join(words).lower().strip()
-
-            wordcloud = WordCloud(
-                        regexp='[ก-๙]+',
-                        font_path=is_font_path,
-                        stopwords=set_stop_word,
-                        width=250, 
-                        height=250,
-                        prefer_horizontal=1,
-                        max_words=50, 
-                        colormap='tab20c',
-                        background_color = 'white').generate(all_words)
-
-            plt.figure(figsize = (10, 9))
-            plt.imshow(wordcloud)
-            plt.axis('off')
-            plt.tight_layout(pad=0)
-            plt.savefig(image, format='png')
-
-            base64_img = base64.encodestring(image.getvalue())
-
-            return base64_img
+            return jsonify(status=500)
 
 
 

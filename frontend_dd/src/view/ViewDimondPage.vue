@@ -1,4 +1,10 @@
 <template>
+    <div class="set-loading" v-if="this.onloading === true">
+        <div class="set-animation">
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+    
     <div class="dimond-container">
         <div class="title-dimond flex justify-center">
             <div class="set-front font-bold">Double Diamond</div>
@@ -25,7 +31,8 @@
             </div>
             <div class="title-selection mt-[50px] mb-6 text-center  h-[40px] ">
                 <div class="font-bold text-white" v-if="$store.state.saveDimondSelection !== ''">
-                    {{ $store.state.saveDimondSelection }}
+                    <div>{{ $store.state.saveDimondSelection }}</div>
+                    <div class="text-red-500" v-if="onError !== ''">{{ onError }}</div>
                 </div>
             </div>
             <div class="h-[30px] w-[90%] m-auto flex justify-end">
@@ -56,6 +63,7 @@
             </div>
         </div>
     </div>
+ 
 </template>
 
 <script>
@@ -69,7 +77,8 @@ export default {
     },
     data(){
         return{
-            onloading:false
+            onloading:false,
+            onError: ""
         }
     },
     methods:{
@@ -104,21 +113,32 @@ export default {
                         if(sendStatus.data.status === 200){
                             alert("Insert success.")
                             this.onloading = false
+                            this.onError = ""
+                            this.haddleDimond()
+                            this.$router.push("/")
                         }else{
                             alert("Fail to save data!")
                             this.onloading = false
+                            this.onError = "Fail to save data!"
+                            this.haddleDimond()
                         }
                     }catch(err){
                         alert(err)
                         this.onloading = false
+                        this.onError = err
+                        this.haddleDimond()
                     }
                 }else{
                     alert("Fail to convert text to img!")
                     this.onloading = false
+                    this.onError = "Fail to convert text to img!"
+                    this.haddleDimond()
                 }
             }catch(err){
                 alert(err)
                 this.onloading = false
+                this.onError = err
+                this.haddleDimond()
             }
         },
 
@@ -131,6 +151,7 @@ export default {
         // },
 
         haddleDimond(selection){
+            this.$store.state.micStatus = false
             window.SpeechRecognition = window.SpeechRecognition ||  window.webkitSpeechRecognition;
             const recognition = new window.SpeechRecognition();      
             recognition.interimResults = true;
@@ -284,8 +305,61 @@ export default {
     .rotate-desc{
         font-size: 14px;
     }
+
+    .set-loading{
+        position: fixed;
+        width: 100%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 100vh;  
+        background: rgba(210, 210, 210, 0.5);
+    }
+
+    .set-animation{
+        display: flex;
+        justify-content: center;
+        transform: translateY(300px);
+    }
  
-       
+ 
+
+    .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #ffffff;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #ffffff transparent transparent transparent;
+      }
+      .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+      @keyframes lds-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      
 
   
 </style>

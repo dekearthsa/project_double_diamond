@@ -12,54 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.controllerSaveAnswer = void 0;
 const { HaddleCRUD } = require("../controller/crud");
 const setInsertData = new HaddleCRUD.InsertData();
-const PROBLEM_LEFT = "dimond-l-p";
-const PROBLEM_RIGHT = "dimond-r-p";
-const SOLUTION_LEFT = "dimond-l-s";
-const SOLUTION_RIGHT = "dimond-r-s";
 const controllerSaveAnswer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, diamond, answer, imgBase64, comment } = req.body;
-    console.log("data in => ", name, diamond, answer, comment);
-    const setComment = comment ? comment : "no-comment";
-    let dimondSelection = "";
-    if (diamond === PROBLEM_LEFT) {
-        dimondSelection = "problem_left";
-        const status = yield setInsertData.insertUserData(name, dimondSelection, answer, imgBase64, setComment);
-        if (status.status) {
-            res.send(status);
-        }
-        else {
-            res.send(status);
-        }
+    const { username, text_l_p, img_l_p, text_r_p, img_r_p, text_l_s, img_l_s, text_r_s, img_r_s } = req.body;
+    console.log("data in => ", username, text_l_p, img_l_p, text_r_p, img_r_p, text_l_s, img_l_s, text_r_s, img_r_s);
+    const status = yield setInsertData.insertUserData(username, text_l_p, img_l_p, text_r_p, img_r_p, text_l_s, img_l_s, text_r_s, img_r_s);
+    if (status.status) {
+        const warp = {
+            status: 200,
+            desc: status.desc
+        };
+        res.send(warp);
     }
-    else if (diamond === PROBLEM_RIGHT) {
-        dimondSelection = "problem_right";
-        const status = yield setInsertData.insertUserData(name, dimondSelection, answer, imgBase64, setComment);
-        if (status.status) {
-            res.send(status);
-        }
-        else {
-            res.send(status);
-        }
-    }
-    else if (diamond === SOLUTION_LEFT) {
-        dimondSelection = "solution_left";
-        const status = yield setInsertData.insertUserData(name, dimondSelection, answer, imgBase64, setComment);
-        if (status.status) {
-            res.send(status);
-        }
-        else {
-            res.send(status);
-        }
-    }
-    else if (diamond === SOLUTION_RIGHT) {
-        dimondSelection = "solution_right";
-        const status = yield setInsertData.insertUserData(name, dimondSelection, answer, imgBase64, setComment);
-        if (status.status) {
-            res.send(status);
-        }
-        else {
-            res.send(status);
-        }
+    else {
+        const warp = {
+            status: 500,
+            desc: status.desc
+        };
+        res.send(warp);
     }
 });
 exports.controllerSaveAnswer = controllerSaveAnswer;

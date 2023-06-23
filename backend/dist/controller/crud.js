@@ -14,15 +14,19 @@ const { answerModel } = require("../model/modelAnswer");
 var HaddleCRUD;
 (function (HaddleCRUD) {
     class InsertData {
-        insertUserData(name, diamond, answer, imgBase64, comment) {
+        insertUserData(username, text_l_p, img_l_p, text_r_p, img_r_p, text_l_s, img_l_s, text_r_s, img_r_s) {
             return __awaiter(this, void 0, void 0, function* () {
                 try {
                     answerModel.create({
-                        Username: name,
-                        Diamond: diamond,
-                        Answer: answer,
-                        ImageBase64: imgBase64,
-                        Comment: comment
+                        Username: username,
+                        Text_l_p: text_l_p,
+                        Text_r_p: text_r_p,
+                        Text_l_s: text_l_s,
+                        Text_r_s: text_r_s,
+                        Img_l_p: img_l_p,
+                        Img_r_p: img_r_p,
+                        Img_l_s: img_l_s,
+                        Img_r_s: img_r_s,
                     });
                     const warp = {
                         status: true,

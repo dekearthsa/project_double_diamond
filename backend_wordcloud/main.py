@@ -45,14 +45,16 @@ def send_word_cloud():
         arrayText.append(text_r_p)
         arrayText.append(text_l_s)
         arrayText.append(text_r_s)
-
+        # print(text_l_p)
+        # print(text_r_p)
+        # print(text_l_s)
+        # print(text_r_s)
         if(len(arrayText) != 0):
             arrayBase64 = []
-            for text in len(text):
+            for text in arrayText:
                 words = word_tokenize(text) 
                 all_words = ' '.join(words).lower().strip()
                 # print("all_words ==> ",all_words)
-
                 wordcloud = WordCloud(
                             regexp='[ก-๙]+',
                             font_path=is_font_path,
@@ -71,7 +73,8 @@ def send_word_cloud():
                 plt.savefig(image, format='png')
 
                 base64_img = base64.encodestring(image.getvalue())
-                arrayBase64.append(base64_img)
+                convert_string = str(base64_img)
+                arrayBase64.append(convert_string)
                 
             return jsonify(
                 status=200,

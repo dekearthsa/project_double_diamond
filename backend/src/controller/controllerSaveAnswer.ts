@@ -13,7 +13,7 @@ const controllerSaveAnswer = async (req: any, res: any) => {
         text_r_s,
         img_r_s
     } = req.body;
-    console.log("data in => ",username, text_l_p, img_l_p, text_r_p,img_r_p,text_l_s,img_l_s,text_r_s,img_r_s)
+    // console.log("data in => ",username, text_l_p, img_l_p, text_r_p,img_r_p,text_l_s,img_l_s,text_r_s,img_r_s)
 
     const status = await setInsertData.insertUserData(username, text_l_p, img_l_p,text_r_p ,img_r_p,text_l_s,img_l_s,text_r_s,img_r_s);
     if(status.status){

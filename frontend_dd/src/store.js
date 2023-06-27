@@ -16,6 +16,6 @@ export default createStore({
         text_l_s: "",
         text_r_s: "",
 
-        ip_address: "192.168.1.50"  // <=== เปลี่ยน IP_address ตรงนี้้นะครับ
+        ip_address: "localhost"  // <=== เปลี่ยน IP_address ตรงนี้้นะครับ
     }
 });

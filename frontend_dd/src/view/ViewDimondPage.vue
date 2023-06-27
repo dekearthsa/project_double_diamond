@@ -91,11 +91,13 @@ export default {
                     text_l_s: this.$store.state.text_l_s,
                     text_r_s: this.$store.state.text_r_s
                 }
-                const rawDataImg = await axios.post(`http://${this.$store.state.ip_address}/api/wordcloud`,warpText);
+                // console.log("warpText => ",warpText);
+                const rawDataImg = await axios.post(`http://${this.$store.state.ip_address}:3422/api/wordcloud`,warpText);
                 const wordcloudBase64_l_p= rawDataImg.data.img_l_p
                 const wordcloudBase64_r_p= rawDataImg.data.img_r_p
                 const wordcloudBase64_l_s= rawDataImg.data.img_l_s
                 const wordcloudBase64_r_s= rawDataImg.data.img_r_s
+                // console.log("rawDataImg => ",rawDataImg.data);
                 if(rawDataImg.data.status === 200){
                     const warpData = {
                         username: this.$store.state.name,
@@ -108,8 +110,9 @@ export default {
                         text_r_s: this.$store.state.text_r_s,
                         img_r_s: wordcloudBase64_r_s,
                     }
+                    // console.log("warpData img => ",warpData);
                     try{
-                        const sendStatus = await axios.post(`http://${this.$store.state.ip_address}/api/insert`,warpData);
+                        const sendStatus = await axios.post(`http://${this.$store.state.ip_address}:3311/api/insert`,warpData);
                         if(sendStatus.data.status === 200){
                             alert("Insert success.")
                             this.onloading = false

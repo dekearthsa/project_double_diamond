@@ -1,7 +1,7 @@
 "use strict";
 const mongoose = require("mongoose");
-// const MONGO_URI = "mongodb://root:root@database:27017/double_diamond";
-const MONGO_URI = "mongodb://127.0.0.1:27017/double_diamond";
+const MONGO_URI = "mongodb://root:root@database:27017/double_diamond";
+// const MONGO_URI ="mongodb://127.0.0.1:27017/double_diamond"
 exports.connect = () => {
     mongoose.connect(MONGO_URI, {
         useNewUrlParser: true,

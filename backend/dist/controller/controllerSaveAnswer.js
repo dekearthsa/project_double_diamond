@@ -14,7 +14,7 @@ const { HaddleCRUD } = require("../controller/crud");
 const setInsertData = new HaddleCRUD.InsertData();
 const controllerSaveAnswer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, text_l_p, img_l_p, text_r_p, img_r_p, text_l_s, img_l_s, text_r_s, img_r_s } = req.body;
-    console.log("data in => ", username, text_l_p, img_l_p, text_r_p, img_r_p, text_l_s, img_l_s, text_r_s, img_r_s);
+    // console.log("data in => ",username, text_l_p, img_l_p, text_r_p,img_r_p,text_l_s,img_l_s,text_r_s,img_r_s)
     const status = yield setInsertData.insertUserData(username, text_l_p, img_l_p, text_r_p, img_r_p, text_l_s, img_l_s, text_r_s, img_r_s);
     if (status.status) {
         const warp = {

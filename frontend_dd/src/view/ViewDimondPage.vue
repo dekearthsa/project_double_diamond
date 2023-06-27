@@ -83,7 +83,7 @@ export default {
     },
     methods:{
         async haddleSubmit(){
-            this.onloading = true
+            this.onloading = true;
             try{
                 const warpText = {  
                     text_l_p: this.$store.state.text_l_p,
@@ -218,7 +218,13 @@ export default {
             }
         },
         haddleBack(){
-            this.$router.push("/")
+            this.$router.push("/");
+        }
+    },
+    mounted(){
+        if(this.$store.state.name === ""){
+            alert("username can't be empty!");
+            this.$router.push("/");
         }
     }
 }

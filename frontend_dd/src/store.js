@@ -11,11 +11,12 @@ export default createStore({
         // wordcloudBase64_r_p:"",
         // wordcloudBase64_l_s:"",
         // wordcloudBase64_r_s:"",
+        rawText:"",
         text_l_p: "",
         text_r_p: "",
         text_l_s: "",
         text_r_s: "",
 
-        ip_address: "localhost"  // <=== เปลี่ยน IP_address ตรงนี้้นะครับ
+        ip_address: "192.168.247.160"  // <=== เปลี่ยน IP_address ตรงนี้้นะครับ
     }
 });

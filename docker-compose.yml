@@ -25,15 +25,15 @@ services:
     networks:
       - net
   
-  service_frontend_dd:
-    container_name: frontend_dd
-    restart: unless-stopped
-    build: 
-      context: "./frontend_dd"
-    ports:
-      - "5172:5172"
-    networks:
-      - net
+  # service_frontend_dd:
+  #   container_name: frontend_dd
+  #   restart: unless-stopped
+  #   build: 
+  #     context: "./frontend_dd"
+  #   ports:
+  #     - "5172:5172"
+  #   networks:
+  #     - net
 
   database:
     container_name: database

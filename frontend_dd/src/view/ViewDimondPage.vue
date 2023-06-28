@@ -202,56 +202,60 @@ export default {
         haddleDimond(selection){
             
             try{
-                if(selection === "dimond-l-p"){
-                this.$store.state.micStatus = true
-                this.$store.state.saveDimondSelection = "Problem left dimond"
-                recognition.addEventListener("result", (event) => {
-                let text = Array.from(event.results)
-                    .map(result => result[0])
-                    .map(result => result.transcript)
-                    .join("")
-                    this.$store.state.rawText = text
-                    })
-                recognition.start()
-            }
-            else if(selection === "dimond-r-p"){
-                this.$store.state.micStatus = true
-                this.$store.state.saveDimondSelection = "Problem right dimond"
-                recognition.addEventListener("result", (event) => {
-                
-                let text = Array.from(event.results)
-                    .map(result => result[0])
-                    .map(result => result.transcript)
-                    .join("")
-                    this.$store.state.rawText = text
-                })
-                recognition.start()
-            }
-            else if(selection === "dimond-l-s"){
-                this.$store.state.micStatus = true
-                this.$store.state.saveDimondSelection = "Solution left dimond"
-                recognition.addEventListener("result", (event) => {
+                if(this.$store.state.micStatus === false){
+                    if(selection === "dimond-l-p"){
+                    this.$store.state.micStatus = true
+                    this.$store.state.saveDimondSelection = "Problem left dimond"
+                    recognition.addEventListener("result", (event) => {
                     let text = Array.from(event.results)
-                    .map(result => result[0])
-                    .map(result => result.transcript)
-                    .join("")
-                    this.$store.state.rawText = text
-                })
-                recognition.start()
-            }
-            else if(selection === "dimond-r-s"){
-                this.$store.state.micStatus = true
-                this.$store.state.saveDimondSelection = "Solution right dimond"
-                recognition.addEventListener("result", (event) => {
-                    
-                    let text = Array.from(event.results)
-                    .map(result => result[0])
-                    .map(result => result.transcript)
-                    .join("")
-                    this.$store.state.rawText = text
-                })
-                recognition.start()
-            }
+                        .map(result => result[0])
+                        .map(result => result.transcript)
+                        .join("")
+                        this.$store.state.rawText = text
+                        })
+                    recognition.start()
+                    }
+                    else if(selection === "dimond-r-p"){
+                        this.$store.state.micStatus = true
+                        this.$store.state.saveDimondSelection = "Problem right dimond"
+                        recognition.addEventListener("result", (event) => {
+                        
+                        let text = Array.from(event.results)
+                            .map(result => result[0])
+                            .map(result => result.transcript)
+                            .join("")
+                            this.$store.state.rawText = text
+                        })
+                        recognition.start()
+                    }
+                    else if(selection === "dimond-l-s"){
+                        this.$store.state.micStatus = true
+                        this.$store.state.saveDimondSelection = "Solution left dimond"
+                        recognition.addEventListener("result", (event) => {
+                            let text = Array.from(event.results)
+                            .map(result => result[0])
+                            .map(result => result.transcript)
+                            .join("")
+                            this.$store.state.rawText = text
+                        })
+                        recognition.start()
+                    }
+                    else if(selection === "dimond-r-s"){
+                        this.$store.state.micStatus = true
+                        this.$store.state.saveDimondSelection = "Solution right dimond"
+                        recognition.addEventListener("result", (event) => {
+                            
+                            let text = Array.from(event.results)
+                            .map(result => result[0])
+                            .map(result => result.transcript)
+                            .join("")
+                            this.$store.state.rawText = text
+                        })
+                        recognition.start()
+                    }
+                }else{
+                    alert("please close mic before go to the next question.")
+                }
             }catch(err){
                 alert("please close mic before go to the next question.")
             }
@@ -274,6 +278,7 @@ export default {
                 this.$store.state.text_r_s = this.$store.state.rawText;
                 this.$store.state.rawText = "";
             }
+            
         },
         haddleBack(){
             this.$router.push("/");
@@ -281,6 +286,7 @@ export default {
     },
     mounted(){
         if(this.$store.state.name === ""){
+            
             alert("username can't be empty!");
             this.$router.push("/");
         }

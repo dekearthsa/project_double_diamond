@@ -87,6 +87,33 @@ def send_word_cloud():
             return jsonify(status=500)
 
 
+@app.route("/api/genimg", methods= ['POST'])
+def gen_text_to_img():
+
+    image = BytesIO()
+    set_stop_word =  thai_stopwords()
+
+    req = request.get_json(force=True) 
+    text = req['text']
+    words = word_tokenize(text)
+    all_words = ' '.join(words).lower().strip()
+    wordcloud = WordCloud(
+        regexp='[ก-๙]+',
+        font_path=is_font_path,
+        stopwords=set_stop_word,
+        width=250, 
+        height=250,
+        prefer_horizontal=1,
+        max_words=50, 
+        colormap='tab20c',
+        background_color = 'white').generate(all_words)
+    plt.figure(figsize=(8, 13))
+    plt.imshow(wordcloud)
+    plt.axis('off')
+    plt.tight_layout(pad=0)
+    plt.savefig(image, format='png')
+    base64_img = base64.encodestring(image.getvalue())
+    return base64_img
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0",port=3422)

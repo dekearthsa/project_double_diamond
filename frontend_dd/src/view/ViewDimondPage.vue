@@ -78,21 +78,71 @@
             </div>
             <div class="w-[90%] mt-10 mb-5 m-auto text-center">
                 <div>
-                    <div >
+                    <div class="mb-4">
                         <div class="text-white text-center">Problem left diamond</div>
-                        <textarea  class=" w-[90%]  rounded-xl" v-model="$store.state.text_l_p"></textarea>
+                        <div class="set-info">
+                            <div>
+                                <textarea  class=" w-[90%]  rounded-xl" v-model="$store.state.text_l_p"></textarea>
+                            </div>
+                            <div class="border border-gray-300 rounded-md">
+                                <div v-if="this.wordC_l_p === ''" class="text-white font-bold text-center m-auto">
+                                    <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-center m-auto translate-y-10">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <img   v-if="this.wordC_l_p !== ''" :src="`data:image/png;base64, ${this.wordC_l_p}`"  class=""/>
+                            </div>
+                        </div>
                     </div>
-                    <div>
+                    <div class="mb-4">
                         <div class="text-white text-center">Problem Right diamond</div>
-                        <textarea class="m-auto w-[90%] rounded-xl" v-model="$store.state.text_r_p"></textarea>
+                        <div class="set-info">
+                            <div>
+                                <textarea class="m-auto w-[90%] rounded-xl" v-model="$store.state.text_r_p"></textarea>
+                            </div>
+                            <div class="border border-gray-300 rounded-md">
+                                <div v-if="this.wordC_l_p === ''" class="text-white font-bold text-center m-auto">
+                                    <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-center m-auto translate-y-10">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <img   v-if="this.wordC_l_p !== ''" :src="`data:image/png;base64, ${this.wordC_r_p}`"  class=""/>
+                            </div>
+                        </div>
+                        
                     </div>
-                    <div>
+                    <div class="mb-4">
                         <div class="text-white text-center">Solution left diamond</div>
-                        <textarea class="m-auto w-[90%] rounded-xl"  v-model="$store.state.text_l_s"></textarea>
+                        <div class="set-info">
+                            <div>
+                                <textarea class="m-auto w-[90%] rounded-xl"  v-model="$store.state.text_l_s"></textarea>
+                            </div>
+                            <div class="border border-gray-300 rounded-md">
+                                <div v-if="this.wordC_l_s === ''" class="text-white font-bold text-center m-auto">
+                                    <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-center m-auto translate-y-10">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <img   v-if="this.wordC_l_s !== ''" :src="`data:image/png;base64, ${this.wordC_l_s}`"  class=""/>
+                            </div>
+                        </div>
                     </div>
-                    <div>   
+                    <div class="mb-4">   
                         <div class="text-white text-center">Solution Right diamond</div>
-                        <textarea class="m-auto w-[90%] rounded-xl"  v-model="$store.state.text_r_s"></textarea>
+                        <div class="set-info">
+                            <div>
+                                <textarea class="m-auto w-[90%] rounded-xl"  v-model="$store.state.text_r_s"></textarea>
+                            </div>
+                            <div class="border border-gray-300 rounded-md">
+                                <div v-if="this.wordC_r_s === ''" class="text-white font-bold text-center m-auto">
+                                    <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-center m-auto translate-y-10">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <img   v-if="this.wordC_r_s !== ''" :src="`data:image/png;base64, ${this.wordC_r_s}`"  class=""/>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
                 
@@ -120,7 +170,11 @@ export default {
     data(){
         return{
             onloading:false,
-            onError: ""
+            onError: "",
+            wordC_l_p: "",
+            wordC_r_p: "",
+            wordC_l_s: "",
+            wordC_r_s: ""
         }
     },
     methods:{
@@ -261,22 +315,40 @@ export default {
             }
             
         },
-        haddleStop(){
+        async haddleStop(){
+            this.onloading = true
             this.$store.state.micStatus = false;
             
             recognition.stop();
+
+            const warpText = {
+                text:this.$store.state.rawText
+            }
+
             if(this.$store.state.saveDimondSelection === "Problem left dimond"){
+                const setimg = await axios.post(`http://${this.$store.state.ip_address}:3422/api/genimg`,warpText)
+                this.wordC_l_p = setimg.data;
                 this.$store.state.text_l_p = this.$store.state.rawText;
                 this.$store.state.rawText = "";
+                this.onloading = false;
             }else if(this.$store.state.saveDimondSelection === "Problem right dimond"){
+                const setimg = await axios.post(`http://${this.$store.state.ip_address}:3422/api/genimg`,warpText)
+                this.wordC_r_p = setimg.data
                 this.$store.state.text_r_p = this.$store.state.rawText;
                 this.$store.state.rawText = "";
+                this.onloading = false;
             }else if(this.$store.state.saveDimondSelection === "Solution left dimond"){
+                const setimg = await axios.post(`http://${this.$store.state.ip_address}:3422/api/genimg`,warpText)
+                this.wordC_l_s = setimg.data
                 this.$store.state.text_l_s = this.$store.state.rawText;
                 this.$store.state.rawText = "";
+                this.onloading = false;
             }else if(this.$store.state.saveDimondSelection === "Solution right dimond"){
+                const setimg = await axios.post(`http://${this.$store.state.ip_address}:3422/api/genimg`,warpText)
+                this.wordC_r_s = setimg.data
                 this.$store.state.text_r_s = this.$store.state.rawText;
                 this.$store.state.rawText = "";
+                this.onloading = false;
             }
             
         },
@@ -312,7 +384,7 @@ export default {
     .dimond-container{
         background: rgb(255,255,255);
         background: linear-gradient(180deg, rgba(255,255,255,1) 1%, rgba(110,110,110,1) 49%, rgba(59,59,59,1) 100%);
-        height: 180vh;
+        height: 190vh;
         width: 100%;
     }
     .triangle-right {
@@ -434,5 +506,8 @@ export default {
       }
       
 
-  
+.set-info{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
 </style>
